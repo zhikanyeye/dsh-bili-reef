@@ -101,23 +101,41 @@ test('execute: dryRun 只返回命令不执行', async () => {
   assert.equal(result.data.dryRun, true)
 })
 
-test('checkAvailability: 缓存生效', async () => {
+test('checkAvailability: 成功时缓存生效', async () => {
   const b = new BiliCliBridge({ pythonPath: 'not-exist' })
   const calls = []
-  const orig = b._tryBiliVersion.bind(b)
+  // 两个探测器都 mock，避免依赖本机是否装了 bili
   b._tryBiliVersion = (cmd) => {
     calls.push(cmd)
-    return orig(cmd)
+    return { ok: true, version: '9.9.9' }
   }
   b._tryPythonModule = () => ({ ok: false })
 
   const first = await b.checkAvailability()
   const second = await b.checkAvailability()
 
-  // 第二次应命中缓存,不再调用检测
+  assert.equal(first.available, true)
+  assert.equal(second.available, true)
+  assert.equal(second.version, '9.9.9')
+  assert.equal(calls.length, 1, '成功结果应命中缓存，不再重复检测')
+})
+
+test('checkAvailability: 失败不缓存（冷启动超时不污染后续调用）', async () => {
+  const b = new BiliCliBridge({ pythonPath: 'not-exist' })
+  const calls = []
+  b._tryBiliVersion = (cmd) => {
+    calls.push(cmd)
+    return { ok: false }
+  }
+  b._tryPythonModule = () => ({ ok: false })
+  b._tryPipShow = () => ({ ok: false })
+
+  const first = await b.checkAvailability()
+  const second = await b.checkAvailability()
+
   assert.equal(first.available, false)
   assert.equal(second.available, false)
-  assert.ok(calls.length <= 1, '缓存应阻止重复检测')
+  assert.equal(calls.length, 2, '失败不应被缓存，下次应重新检测')
 })
 
 test('解析: 成功契约', () => {

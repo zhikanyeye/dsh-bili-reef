@@ -1,3 +1,68 @@
+## 0.5.0（2026-10-29）· 融合版 dsh-bili-reef
+
+本版本把两个独立项目合并为**一个** DSH 插件，实现「养鱼 + 喂鱼」一体化：
+让 agent 拥有属于自己的 B 站账号。
+
+### 融合自两个上游项目
+
+| 上游 | 作者 | 贡献 |
+|---|---|---|
+| [dsh-bili-whale](https://github.com/Alterssss/dsh-bili-whale) | Alterssss | 「养鱼」内核：生物钟、偏好学习、双日记、分享闸门、监听、限流护栏 |
+| [bili-cli](https://github.com/kukemc/bili-cli) | kukemc | 「喂鱼」运营层：109 个 B 站账号命令、JSON 契约、错误码体系 |
+
+融合与再分发由 zhikanyeye 完成。
+
+### 新增：bili-cli 桥接层
+
+- `lib/bili-cli-bridge.js` —— 非侵入式桥接层，50+ 语义方法（auth / video / comment / dm /
+  dynamic / upload / me / data / user / feed / hot / search / season / asr / danmaku / owner / skills / schema）
+- 严格的 JSON 契约：`{"ok":true,"data":...}` 或 `{"ok":false,"error":{code,message,hint}}`
+- Windows 沙箱兼容：改用 mkdtemp 文件后备 stdio，避免匿名管道被拒
+- Python 冷启动容错：`bili --version` 首次可能 >10s（Defender 扫描），超时后以 30s 重试一次
+- 失败不缓存：避免一次冷启动超时把 5 分钟内所有调用都标成 `bridge_unavailable`
+- 只读命令结果缓存，写操作不缓存
+
+### 新增：CLI 桥接子命令
+
+`node tools/bili.mjs bili-cli <子命令>`：
+
+| 子命令 | 作用 |
+|---|---|
+| `status` | 环境自检（Python / bili-cli 是否就绪）|
+| `schema` | 全部 109 个命令及参数 |
+| `list` | 紧凑命令名清单 |
+| `help <cmd>` | 单命令参数说明 |
+| `run <cmd> [参数...]` | 执行一条 bili 命令（透传）|
+| `watch` | 流式私信监听（长任务，逐行 JSON）|
+
+### 新增：前端控制面板
+
+- 设置页新增「bili-cli 运营」面板：**发动态 / 投稿 / 查数据** 按钮 + 输入项
+- 新增 API 路由 `POST /dsh-bili/api/bili-cli`，`action` 支持
+  `dynamic-post` / `upload-video` / `me-stats` / `upload-stats`，其余走通用 `execute` 透传
+- 原有评论模块保持不变（继续用插件自己的通道）
+
+### 新增：融合版技能
+
+- `skills/bili-cli/SKILL.md` —— 以插件桥接命令为首选、系统 `bili` 为兜底；
+  保留上游全部 109 命令、错误码表与 7 条安全规则
+- `skills/bili-cli/references/` —— errors / safety / workflows
+
+### 变更
+
+- 插件更名为 `dsh-bili-reef`：`package.json`、`cordis.patch.yml`、`lib/index.js`、`lib/client.js` 全部同步
+- **评论模块仍用原通道**，与 bili-cli 的 `comment post` 并存但不混用
+- 消除技能冲突：系统级 `~/.claude/skills/bili-cli` 与 `~/.dsh/skills/bili-cli` 统一替换为融合版
+
+### 文档
+
+- `README.md` —— 完全重写：融合定位、原作者致谢、npm/GitHub/本地三种安装、养鱼与喂鱼能力分述
+- `NOTICE.md` —— 重写：列出两位原作者、版权归属与各自 MIT 许可
+- `docs/deploy.md` —— 新增：npm 发布、DSH 安装、首次配置、验证、排障、升级回滚
+- `docs/bili-cli-install.md` —— 重写为中文，融入插件语境
+- 移除一次性开发记录文档：`AI-SHARE-TRIAL.md`、`BUGFIX-2026-10-25.md`、`DM-HISTORY-FIX.md`、
+  `QR-LOGIN-2026-10-25.md`、`docs/bili-cli-策划案.md`（历史保留在 git 中）
+
 ## 0.4.6（2026-10-24）
 
 ### 0.4.6 补充（2026-10-25）：扫码登录 + 社区报的四个 bug

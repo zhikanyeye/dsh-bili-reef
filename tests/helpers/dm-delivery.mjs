@@ -12,7 +12,7 @@ process.env.TEST_DM_FILE = path.join(process.env.HOME, 'dm-input.json')
 const ts = Math.floor(now / 1000)
 const message = (id, text) => fs.writeFileSync(process.env.TEST_DM_FILE, JSON.stringify({ timestamp: ts, msg_key: id, sender_uid: 222, content: JSON.stringify({ content: text }) }))
 message('1', 'first')
-fs.writeFileSync(process.env.BILI_WHALE_CONFIG, JSON.stringify({ owner: { mid: '222' }, listen: { dm: true, comment: false, live: false } }))
+fs.writeFileSync(process.env.BILI_REEF_CONFIG, JSON.stringify({ owner: { mid: '222' }, listen: { dm: true, comment: false, live: false } }))
 const stateFile = path.join(process.env.HOME, '.bili-ai/dm-await-state.json')
 let fail = true
 const attempts = [], delivered = []

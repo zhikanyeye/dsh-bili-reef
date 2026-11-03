@@ -12,7 +12,7 @@ const { makePlan } = await import('../../tools/lib/night-plan.mjs')
 const dsh = process.env.DSH_HOME, home = process.env.HOME
 for (const channel of ['tick', 'listenTick', 'dmTick']) {
   const cfg = { owner:{mid:'222'}, night:{windows:[{start:'00:00',end:'24:00',wakes:2}],skipChance:0}, listen:{dm:channel==='dmTick',comment:channel==='listenTick',allDay:true,live:false}, diary:{push:false} }
-  fs.writeFileSync(process.env.BILI_WHALE_CONFIG, JSON.stringify(cfg))
+  fs.writeFileSync(process.env.BILI_REEF_CONFIG, JSON.stringify(cfg))
   fs.writeFileSync(path.join(dsh,'whale-night.json'), JSON.stringify(makePlan(cfg.night,{},now,()=>0)))
   process.env.TEST_FEEDS = path.join(home,'timeout-feeds.json')
   fs.writeFileSync(process.env.TEST_FEEDS, JSON.stringify({reply:[],at:[]}))

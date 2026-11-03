@@ -7,9 +7,9 @@
 //     ③ `whale-diary.md` 的叙事段落（偏好被 feed.mjs 解析 Markdown 提取 ✗ 脆弱）
 //     ④ 代码里硬编码（历史昵称 SELF_NAMES ✗）
 //   使用者的体验是"我得读源码才知道要改哪" ✗ —— 这不是模板，是作者的自用件。
-//   现在：**填一个 `bili-whale.config.json` 就完成自定义** ✓，其余全是中性默认值。
+//   现在：**填一个 `bili-reef.config.json` 就完成自定义** ✓，其余全是中性默认值。
 //
-// 查找顺序：$BILI_WHALE_CONFIG → ~/.dsh/bili-whale.config.json → 内置默认值（中性）
+// 查找顺序：$BILI_REEF_CONFIG → ~/.dsh/bili-reef.config.json → 内置默认值（中性）
 import fs from 'node:fs'
 import path from 'node:path'
 // ⚠️ 2026-10-21：configPath 必须 **import 进来** 才可用 ✗

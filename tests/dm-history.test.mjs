@@ -11,9 +11,9 @@ const page=(messages,has_more=0)=>({code:0,data:{messages,has_more}})
 function box(t){
  const home=fs.mkdtempSync(path.join(os.tmpdir(),'dm-history-'));t.after(()=>fs.rmSync(home,{recursive:true,force:true}))
  fs.mkdirSync(path.join(home,'.bili-ai'));fs.mkdirSync(path.join(home,'.dsh'))
- const state=path.join(home,'.bili-ai/dm-await-state.json'),cfg=path.join(home,'.dsh/bili-whale.config.json'),fixture=path.join(home,'history.json'),log=path.join(home,'requests')
+ const state=path.join(home,'.bili-ai/dm-await-state.json'),cfg=path.join(home,'.dsh/bili-reef.config.json'),fixture=path.join(home,'history.json'),log=path.join(home,'requests')
  fs.writeFileSync(path.join(home,'.bili-ai/credentials.json'),JSON.stringify({sessdata:'fake',bili_jct:'fake'}));fs.writeFileSync(cfg,JSON.stringify({owner:{mid:'222'}}))
- const env={...process.env,HOME:home,USERPROFILE:home,DSH_HOME:path.join(home,'.dsh'),BILI_WHALE_CONFIG:cfg,BILI_TRAFFIC_TEST:'1',NODE_TEST_CONTEXT:'child-v8',NODE_OPTIONS:'--import='+pathToFileURL(path.join(root,'tests/helpers/history-fetch.mjs')),TEST_HISTORY:fixture,TEST_REQUESTS:log}
+ const env={...process.env,HOME:home,USERPROFILE:home,DSH_HOME:path.join(home,'.dsh'),BILI_REEF_CONFIG:cfg,BILI_TRAFFIC_TEST:'1',NODE_TEST_CONTEXT:'child-v8',NODE_OPTIONS:'--import='+pathToFileURL(path.join(root,'tests/helpers/history-fetch.mjs')),TEST_HISTORY:fixture,TEST_REQUESTS:log}
  const run=(...args)=>spawnSync(process.execPath,[path.join(root,'tools/commands/dm-await.mjs'),'--json',...args],{env,encoding:'utf8',timeout:10000})
  return {home,env,state,log,run,put:d=>fs.writeFileSync(fixture,JSON.stringify(d)),save:d=>fs.writeFileSync(state,JSON.stringify(d)),read:()=>JSON.parse(fs.readFileSync(state)),peek:()=>{const r=run('--once','--peek');assert.equal(r.status,0,r.stderr);return JSON.parse(r.stdout)}}
 }

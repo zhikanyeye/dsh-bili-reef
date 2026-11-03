@@ -28,7 +28,7 @@ try {
   cred = JSON.parse(fs.readFileSync(path.join(HOME, '.bili-ai', 'credentials.json'), 'utf8'))
 } catch {}
 try {
-  cfg = JSON.parse(fs.readFileSync(dshPath('bili-whale.config.json'), 'utf8'))
+  cfg = JSON.parse(fs.readFileSync(dshPath('bili-reef.config.json'), 'utf8'))
 } catch {}
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
 const cookie = `SESSDATA=${cred.sessdata}; bili_jct=${cred.bili_jct}; buvid3=${cred.buvid3 ?? ''}`

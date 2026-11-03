@@ -8,13 +8,13 @@ import {spawnSync} from 'node:child_process'
 import {fileURLToPath,pathToFileURL} from 'node:url'
 const root=fileURLToPath(new URL('../',import.meta.url))
 function sandbox(t,cfg={}) {
-  const home=fs.mkdtempSync(path.join(os.tmpdir(),'bili-whale-test-'))
+  const home=fs.mkdtempSync(path.join(os.tmpdir(),'bili-reef-test-'))
   t.after(()=>fs.rmSync(home,{recursive:true,force:true}))
   const dsh=path.join(home,'portable/profile')
   fs.mkdirSync(dsh,{recursive:true});fs.mkdirSync(path.join(home,'.bili-ai'))
-  fs.writeFileSync(path.join(dsh,'bili-whale.config.json'),JSON.stringify({owner:{mid:'222',name:'Owner'},listen:{comment:false,dm:false,live:false},...cfg}))
+  fs.writeFileSync(path.join(dsh,'bili-reef.config.json'),JSON.stringify({owner:{mid:'222',name:'Owner'},listen:{comment:false,dm:false,live:false},...cfg}))
   fs.writeFileSync(path.join(home,'.bili-ai/credentials.json'),JSON.stringify({sessdata:'test-cookie-not-a-real-account',bili_jct:'a'.repeat(32)}))
-  return {...process.env,USERPROFILE:home,HOME:home,DSH_HOME:dsh,DSH_NODE:process.execPath,BILI_WHALE_CONFIG:path.join(dsh,'bili-whale.config.json'),TEST_REQUESTS:path.join(home,'requests.jsonl'),NODE_OPTIONS:'--import='+pathToFileURL(path.join(root,'tests/helpers/mock-fetch.mjs')).href}
+  return {...process.env,USERPROFILE:home,HOME:home,DSH_HOME:dsh,DSH_NODE:process.execPath,BILI_REEF_CONFIG:path.join(dsh,'bili-reef.config.json'),TEST_REQUESTS:path.join(home,'requests.jsonl'),NODE_OPTIONS:'--import='+pathToFileURL(path.join(root,'tests/helpers/mock-fetch.mjs')).href}
 }
 function run(env,file,args=[]) { const r=spawnSync(process.execPath,[path.join(root,file),...args],{env,encoding:'utf8',timeout:15000});assert.ifError(r.error);return r }
 const requests=env=>fs.existsSync(env.TEST_REQUESTS)?fs.readFileSync(env.TEST_REQUESTS,'utf8'):''

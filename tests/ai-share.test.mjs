@@ -9,7 +9,7 @@ import {makeSample,recordAssessment,decision,readAI,writeAI,notifyOnce,cacheComm
 const home=fs.mkdtempSync(path.join(os.tmpdir(),'whale-ai-share-'))
 process.env.HOME=process.env.USERPROFILE=home
 process.env.DSH_HOME=path.join(home,'.dsh')
-process.env.BILI_WHALE_CONFIG=path.join(home,'.dsh/bili-whale.config.json')
+process.env.BILI_REEF_CONFIG=path.join(home,'.dsh/bili-reef.config.json')
 fs.mkdirSync(process.env.DSH_HOME);fs.mkdirSync(path.join(home,'.bili-ai'))
 fs.writeFileSync(path.join(home,'.bili-ai/credentials.json'),JSON.stringify({sessdata:'fake',bili_jct:'fake'}))
 after(()=>fs.rmSync(home,{recursive:true,force:true}))
@@ -51,7 +51,7 @@ function run(file,args=[]) {
  return spawnSync(process.execPath,[path.join(root,'tools/commands',file+'.mjs'),...args],{encoding:'utf8',timeout:10000,env:{...process.env,TEST_REQUESTS:path.join(home,'requests'),NODE_OPTIONS:'--import='+pathToFileURL(path.join(root,'tests/helpers/mock-fetch.mjs')).href}})
 }
 test('sample CLI reuses cached comments without network and keeps untrusted content as data',()=>{
- fs.writeFileSync(process.env.BILI_WHALE_CONFIG,JSON.stringify({share:{aiCommentGuard:true,via:'comment'},notify:{type:'none'}}))
+ fs.writeFileSync(process.env.BILI_REEF_CONFIG,JSON.stringify({share:{aiCommentGuard:true,via:'comment'},notify:{type:'none'}}))
  cacheComments(bv,'42','hot',rows.slice(0,20));cacheComments(bv,'42','time',rows.slice(20))
  const r=run('ai-share',['sample',bv]);assert.equal(r.status,0,r.stderr)
  assert.equal(JSON.parse(r.stdout).rows.length,20)
@@ -61,7 +61,7 @@ test('actual comment CLI blocks high AI share before quota or network; dry never
  assess(40,35)
  writeAI(bv,'notice',{at:0})
  process.env.TEST_ALERT_LOG=path.join(home,'alerts')
- fs.writeFileSync(process.env.BILI_WHALE_CONFIG,JSON.stringify({owner:{name:'Owner',mid:'222'},share:{enabled:true,via:'comment',aiCommentGuard:true},notify:{type:'command',cmd:process.execPath,args:[path.join(root,'tests/helpers/ai-notify.mjs')]}}))
+ fs.writeFileSync(process.env.BILI_REEF_CONFIG,JSON.stringify({owner:{name:'Owner',mid:'222'},share:{enabled:true,via:'comment',aiCommentGuard:true},notify:{type:'command',cmd:process.execPath,args:[path.join(root,'tests/helpers/ai-notify.mjs')]}}))
  const args=['--oid','42','--bvid',bv,'--message','hello','--share','--auto','--reason','这个视频值得认真分享给你','--score','15','--rank','1']
  for(const mode of ['--dry','--go','--go']) {
   const r=run('comment',[...args,mode]);assert.equal(r.status,3,r.stdout+r.stderr);assert.match(r.stderr,/暂缓分享/)

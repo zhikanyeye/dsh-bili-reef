@@ -11,7 +11,7 @@ const {startScheduler}=await import('../../lib/scheduler.js')
 const {makePlan,completePlan,historyOf}=await import('../../tools/lib/night-plan.mjs')
 const dsh=process.env.DSH_HOME,state=path.join(dsh,'whale-night.json')
 const cfg={night:{windows:[{start:'23:00',end:'01:00',wakes:1}],skipChance:0},listen:{comment:false,dm:false,live:false},diary:{push:false}}
-fs.writeFileSync(process.env.BILI_WHALE_CONFIG,JSON.stringify(cfg))
+fs.writeFileSync(process.env.BILI_REEF_CONFIG,JSON.stringify(cfg))
 const persona=path.join(process.env.USERPROFILE,'.bili-ai/persona.md')
 fs.writeFileSync(persona,'测试专属人设')
 const messages=[]
@@ -38,7 +38,7 @@ for(const t of timers)t.fn()
 await new Promise(r=>setImmediate(r));assert.equal(attempts,2)
 // Skip branch uses the same persisted history and respects diary.push=false.
 now=new RealDate('2026-10-23T23:00:00').getTime()
-cfg.night.skipChance=1;fs.writeFileSync(process.env.BILI_WHALE_CONFIG,JSON.stringify(cfg))
+cfg.night.skipChance=1;fs.writeFileSync(process.env.BILI_REEF_CONFIG,JSON.stringify(cfg))
 const skip=makePlan(cfg.night,historyOf(before,now),now,()=>0)
 fs.writeFileSync(state,JSON.stringify(skip))
 const s2=startScheduler({sessionController:{create:async()=>{},prompt:async p=>messages.push(p.content[0].text)}},{dshHome:dsh,biliMjs:'unused',cwd:process.env.USERPROFILE})
@@ -49,7 +49,7 @@ const end=JSON.parse(fs.readFileSync(state));assert.ok((end.usedCount?.[skip.win
 // Owner mention summary is wired into the real listener, once per fresh batch.
 now=new RealDate('2026-10-24T12:00:00').getTime()
 cfg.owner={mid:'222'};cfg.listen={comment:true,allDay:true,commentIntervalSec:60,dm:false,live:false,mentionSummary:true}
-fs.writeFileSync(process.env.BILI_WHALE_CONFIG,JSON.stringify(cfg))
+fs.writeFileSync(process.env.BILI_REEF_CONFIG,JSON.stringify(cfg))
 process.env.TEST_FEEDS=path.join(process.env.USERPROFILE,'listen-feeds.json')
 fs.writeFileSync(process.env.TEST_FEEDS,JSON.stringify({reply:[],at:[]}))
 const s3=startScheduler({sessionController:{create:async()=>{},prompt:async p=>messages.push(p.content[0].text)}},{dshHome:dsh,biliMjs:'unused',cwd:process.env.USERPROFILE})

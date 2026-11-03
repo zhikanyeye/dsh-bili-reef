@@ -8,7 +8,7 @@ import {fileURLToPath} from 'node:url'
 const home=fs.mkdtempSync(path.join(os.tmpdir(),'whale-poll-')),dsh=path.join(home,'.dsh')
 fs.mkdirSync(dsh);fs.mkdirSync(path.join(home,'.bili-ai'))
 process.env.HOME=process.env.USERPROFILE=home;process.env.DSH_HOME=dsh
-process.env.BILI_WHALE_CONFIG=path.join(dsh,'bili-whale.config.json');process.env.DSH_NODE=process.execPath
+process.env.BILI_REEF_CONFIG=path.join(dsh,'bili-reef.config.json');process.env.DSH_NODE=process.execPath
 process.env.BILI_TRAFFIC_TEST='1';process.env.NODE_TEST_CONTEXT='child-v8'
 fs.writeFileSync(path.join(home,'.bili-ai/credentials.json'),JSON.stringify({sessdata:'fake',bili_jct:'fake'}))
 const RealDate=Date;let now=new RealDate('2026-10-24T12:00:00').getTime()
@@ -35,7 +35,7 @@ globalThis.fetch=async url=>{
   return new Response(JSON.stringify({code:0,data:{items:hit?[{id:String(now),reply_time:Math.floor(now/1000),user:{mid:222,nickname:'Owner'},item:{source_content:'hello'}}]:[]}}))
 }
 const cfg={listen:{dm:true,comment:true,allDay:true,scope:'reply',dmIntervalSec:60,commentIntervalSec:60},night:{windows:[]}}
-const save=()=>fs.writeFileSync(process.env.BILI_WHALE_CONFIG,JSON.stringify(cfg));save()
+const save=()=>fs.writeFileSync(process.env.BILI_REEF_CONFIG,JSON.stringify(cfg));save()
 const {startScheduler}=await import('../../lib/scheduler.js')
 const {trafficGuard}=await import('../../tools/lib/traffic.mjs')
 let deliveries=0

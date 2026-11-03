@@ -25,7 +25,7 @@ npm publish --tags beta     # 预发布
 ```
 
 > ⚠️ `npm publish` 会**打包 `files` 数组里列的文件**。发布前务必确认
-> `credentials.json`、`quota.json`、`bili-whale.config.json`、`whale-diary*.md`
+> `credentials.json`、`quota.json`、`bili-reef.config.json`、`whale-diary*.md`
 > 等运行期产物**没有**被打进去 —— 仓库的 `.gitignore` 已排除它们，`npm pack` 遵循 `.gitignore` 之外还要看 `files` 白名单，两者共同把关。
 
 ### 3. 发布后校验
@@ -184,7 +184,7 @@ dsh plugin --profile desktop add dsh-bili-reef
 
 回滚：把 profile `package.json` 里的版本号改回旧版（如 `0.5.0`），删掉 `node_modules/dsh-bili-reef`，重启 DSH。
 
-> 配置与凭据**不在插件目录里**（分别在 `~/.dsh/bili-whale.config.json` 和 `~/.bili-ai/credentials.json`），
+> 配置与凭据**不在插件目录里**（分别在 `~/.dsh/bili-reef.config.json` 和 `~/.bili-ai/credentials.json`），
 > 升级/重装不会丢数据。只有换号时才需要重新扫码。
 
 ---
@@ -193,7 +193,7 @@ dsh plugin --profile desktop add dsh-bili-reef
 
 | 内容 | 位置 |
 |---|---|
-| 插件设置 | `~/.dsh/bili-whale.config.json` |
+| 插件设置 | `~/.dsh/bili-reef.config.json` |
 | 凭据（Cookie）| `~/.bili-ai/credentials.json`（**永不回显**）|
 | 人设 | `~/.bili-ai/persona.md` |
 | 她的会话工作区 | `~/.dsh/whale-work` |

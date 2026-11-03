@@ -13,7 +13,7 @@ function fixture(t,cfg={}) {
   t.after(()=>fs.rmSync(dir,{recursive:true,force:true}))
   let time=10*86400000,block='PERSONA-A',busy=false,fail=false,createFail=false
   const sent=[],created=[]
-  const args={dshHome:dir,cwd:dir,sessionId:'bili-whale',config:()=>cfg,persona:()=>block,now:()=>time,isBusy:()=>busy,
+  const args={dshHome:dir,cwd:dir,sessionId:'bili-reef',config:()=>cfg,persona:()=>block,now:()=>time,isBusy:()=>busy,
     controller:{async create(r){if(createFail)throw Error('create failed');created.push(r)},async prompt(r){if(fail)throw Error('send failed');sent.push(r)}}}
   const request={content:[{type:'text',text:'TASK'}]}
   return {dir,args,sent,created,request,make:()=>createSessionDelivery(args),advance:n=>time+=n,persona:s=>block=s,busy:b=>busy=b,fail:b=>fail=b,createFail:b=>createFail=b}
@@ -37,22 +37,22 @@ test('failed delivery retries persona; concurrent channels inject only once; edi
 test('rotation waits for idle, preserves old session and restores persona/diary',async t=>{
   const f=fixture(t,{sessionRotateDays:1,personaOncePerSession:true}),d=f.make()
   await d.send(f.request);f.advance(86400001);f.busy(true);await d.send(f.request)
-  assert.equal(f.sent.at(-1).sessionId,'bili-whale')
+  assert.equal(f.sent.at(-1).sessionId,'bili-reef')
   f.busy(false);f.advance(8*60000);await d.send(f.request)
   const r=f.sent.at(-1);assert.match(r.sessionId,/^[0-9a-f-]{36}$/);assert.match(r.content[0].text,/PERSONA-A/);assert.match(r.content[0].text,/whale-diary-private.md/)
-  assert.equal(JSON.parse(fs.readFileSync(path.join(f.dir,'whale-session.json'))).rotatedFrom,'bili-whale')
+  assert.equal(JSON.parse(fs.readFileSync(path.join(f.dir,'whale-session.json'))).rotatedFrom,'bili-reef')
   await f.make().send(f.request);assert.equal(f.sent.at(-1).sessionId,r.sessionId)
 })
 test('restart respects delivery cooldown even when rotation becomes due',async t=>{
   const cfg={sessionRotateDays:0,personaOncePerSession:true},f=fixture(t,cfg)
   await f.make().send(f.request);f.advance(86400001);await f.make().send(f.request)
   cfg.sessionRotateDays=1;await f.make().send(f.request)
-  assert.equal(f.sent.at(-1).sessionId,'bili-whale')
+  assert.equal(f.sent.at(-1).sessionId,'bili-reef')
 })
 test('rotation creation failure does not commit a new session; aborted queue does not send',async t=>{
   const f=fixture(t,{sessionRotateDays:1}),d=f.make();await d.send(f.request);f.advance(86400001);f.createFail(true)
   await assert.rejects(d.send(f.request),/create failed/)
-  assert.equal(JSON.parse(fs.readFileSync(path.join(f.dir,'whale-session.json'))).id,'bili-whale')
+  assert.equal(JSON.parse(fs.readFileSync(path.join(f.dir,'whale-session.json'))).id,'bili-reef')
   const abort=new AbortController();abort.abort();await assert.rejects(d.send(f.request,abort.signal));assert.equal(f.sent.length,1)
 })
 test('invalid state is reported without overwriting it',t=>{
@@ -67,8 +67,8 @@ test('tile options do not consume positional output directory; invalid widths re
 })
 test('custom DSH_HOME is used by deps, notify and selftest without touching default .dsh',t=>{
   const f=fixture(t),dsh=path.join(f.dir,'custom-dsh');fs.mkdirSync(dsh)
-  const env={...process.env,USERPROFILE:f.dir,HOME:f.dir,DSH_HOME:dsh,DSH_NODE:process.execPath,BILI_WHALE_CONFIG:'',NODE_OPTIONS:''}
-  fs.writeFileSync(path.join(dsh,'bili-whale.config.json'),JSON.stringify({night:{windows:[{start:'20:00',end:'24:00'}]},notify:{type:'file'}}))
+  const env={...process.env,USERPROFILE:f.dir,HOME:f.dir,DSH_HOME:dsh,DSH_NODE:process.execPath,BILI_REEF_CONFIG:'',NODE_OPTIONS:''}
+  fs.writeFileSync(path.join(dsh,'bili-reef.config.json'),JSON.stringify({night:{windows:[{start:'20:00',end:'24:00'}]},notify:{type:'file'}}))
   fs.writeFileSync(path.join(dsh,'whale-night.json'),JSON.stringify({action:'wake',atMs:Date.now()+3600000}))
   const cli=fileURLToPath(new URL('../tools/bili.mjs',import.meta.url))
   const run=(...args)=>spawnSync(process.execPath,[cli,...args],{env,encoding:'utf8',timeout:30000})

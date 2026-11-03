@@ -11,9 +11,9 @@ import {apiGet,signWbi} from '../tools/lib/bili-api.mjs'
 const root=fileURLToPath(new URL('../',import.meta.url))
 function sandbox(t,cfg={}){
  const home=fs.mkdtempSync(path.join(os.tmpdir(),'whale-supplement-'));t.after(()=>fs.rmSync(home,{recursive:true,force:true}));const dsh=path.join(home,'.dsh'),data=path.join(home,'.bili-ai');fs.mkdirSync(dsh);fs.mkdirSync(data)
- fs.writeFileSync(path.join(dsh,'bili-whale.config.json'),JSON.stringify({owner:{mid:'222',name:'Owner'},self:{mid:'111'},share:{enabled:true},notify:{type:'none'},...cfg}))
+ fs.writeFileSync(path.join(dsh,'bili-reef.config.json'),JSON.stringify({owner:{mid:'222',name:'Owner'},self:{mid:'111'},share:{enabled:true},notify:{type:'none'},...cfg}))
  fs.writeFileSync(path.join(data,'credentials.json'),JSON.stringify({sessdata:'fake',bili_jct:'a'.repeat(32)}))
- const env={...process.env,USERPROFILE:home,HOME:home,DSH_HOME:dsh,DSH_NODE:process.execPath,BILI_WHALE_CONFIG:path.join(dsh,'bili-whale.config.json'),TEST_REQUESTS:path.join(home,'requests'),NODE_OPTIONS:'--import='+pathToFileURL(path.join(root,'tests/helpers/supplement-fetch.mjs')).href}
+ const env={...process.env,USERPROFILE:home,HOME:home,DSH_HOME:dsh,DSH_NODE:process.execPath,BILI_REEF_CONFIG:path.join(dsh,'bili-reef.config.json'),TEST_REQUESTS:path.join(home,'requests'),NODE_OPTIONS:'--import='+pathToFileURL(path.join(root,'tests/helpers/supplement-fetch.mjs')).href}
  return {home,dsh,data,env,write:(name,value)=>fs.writeFileSync(path.join(data,name),JSON.stringify(value)),run:(cmd,args=[])=>spawnSync(process.execPath,[path.join(root,'tools/commands/'+cmd+'.mjs'),...args],{env,encoding:'utf8',timeout:15000})}
 }
 const comment=['--oid','1','--bvid','BV1234567890','--message','test','--share','--auto','--reason','这个视频确实值得测试分享','--score','15','--rank','1','--dry']

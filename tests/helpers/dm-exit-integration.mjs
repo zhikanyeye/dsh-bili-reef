@@ -7,8 +7,8 @@ import {syncBuiltinESMExports} from 'node:module'
 import {fileURLToPath} from 'node:url'
 const home=fs.mkdtempSync(path.join(os.tmpdir(),'whale-real-exit-')),dsh=path.join(home,'.dsh')
 fs.mkdirSync(dsh);fs.mkdirSync(path.join(home,'.bili-ai'))
-Object.assign(process.env,{HOME:home,USERPROFILE:home,DSH_HOME:dsh,DSH_NODE:process.execPath,BILI_WHALE_CONFIG:path.join(dsh,'bili-whale.config.json'),TEST_HISTORY:path.join(home,'sessions.json'),NODE_OPTIONS:'--import='+new URL('./history-fetch.mjs',import.meta.url).href,BILI_TRAFFIC_TEST:'1',NODE_TEST_CONTEXT:'child-v8'})
-fs.writeFileSync(process.env.BILI_WHALE_CONFIG,JSON.stringify({owner:{mid:'222'},listen:{dm:true,comment:false,dmIntervalSec:60},night:{windows:[]}}))
+Object.assign(process.env,{HOME:home,USERPROFILE:home,DSH_HOME:dsh,DSH_NODE:process.execPath,BILI_REEF_CONFIG:path.join(dsh,'bili-reef.config.json'),TEST_HISTORY:path.join(home,'sessions.json'),NODE_OPTIONS:'--import='+new URL('./history-fetch.mjs',import.meta.url).href,BILI_TRAFFIC_TEST:'1',NODE_TEST_CONTEXT:'child-v8'})
+fs.writeFileSync(process.env.BILI_REEF_CONFIG,JSON.stringify({owner:{mid:'222'},listen:{dm:true,comment:false,dmIntervalSec:60},night:{windows:[]}}))
 fs.writeFileSync(path.join(home,'.bili-ai/credentials.json'),JSON.stringify({sessdata:'fake',bili_jct:'fake'}))
 const RealDate=Date;let now=Date.now()
 globalThis.Date=class extends RealDate{constructor(...a){super(...(a.length?a:[now]))}static now(){return now}}

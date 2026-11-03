@@ -17,7 +17,7 @@ process.env.USERPROFILE = home
 process.env.HOME = home
 process.env.DSH_HOME = dshHome
 process.env.DSH_NODE = process.execPath
-process.env.BILI_WHALE_CONFIG = path.join(dshHome, 'bili-whale.config.json')
+process.env.BILI_REEF_CONFIG = path.join(dshHome, 'bili-reef.config.json')
 
 const { default: plugin } = await import('../lib/index.js')
 

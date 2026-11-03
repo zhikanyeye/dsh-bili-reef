@@ -7,7 +7,7 @@ import { apiGet } from '../lib/bili-api.mjs'
 //   例: node bili-watch.mjs BV1iLYm6VET3            → 3x3 九宫格
 //       node bili-watch.mjs BV1iLYm6VET3 4x4        → 16 格，看得更细
 //
-// 依赖：ffmpeg（查找顺序见 lib/ffmpeg.mjs：$FFMPEG → PATH → bin/ → ~/.dsh/bili-whale/bin → 本机剪映）
+// 依赖：ffmpeg（查找顺序见 lib/ffmpeg.mjs：$FFMPEG → PATH → bin/ → ~/.dsh/bili-reef/bin → 本机剪映）
 import fs from 'node:fs'
 import path from 'node:path'
 import { execFileSync } from '../lib/capture.mjs'

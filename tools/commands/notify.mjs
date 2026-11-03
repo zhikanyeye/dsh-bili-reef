@@ -13,7 +13,7 @@ import { dshPath } from '../lib/paths.mjs'
 //   node notify.mjs "消息正文" [--title 标题] [--dry]   （--dry = 只算报文，不真发）
 //   node notify.mjs --test                              （发一条测试消息；设置页「发条测试」用它）
 //
-// 配置（~/.dsh/bili-whale.config.json 的 notify 段）：
+// 配置（~/.dsh/bili-reef.config.json 的 notify 段）：
 //   { "type": "none|desktop|webhook|command", "url": "", "template": "text|markdown", "cmd": "" }
 import { spawnSync } from 'node:child_process'
 import { execFileSync } from '../lib/capture.mjs'

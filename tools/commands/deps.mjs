@@ -48,7 +48,7 @@ items.push({
   name: 'ffmpeg（抽帧看画面）',
   ok: ff.ok,
   detail: ff.ok ? `${ff.version}\n  路径：${ff.path}` : (ff.path ? `找到了但跑不起来：${ff.version ?? ff.error}` : '没找到'),
-  fix: '① winget install ffmpeg  ② 或设环境变量 FFMPEG=路径  ③ 或放进 <仓库>/bin/ 或 ~/.dsh/bili-whale/bin/',
+  fix: '① winget install ffmpeg  ② 或设环境变量 FFMPEG=路径  ③ 或放进 <仓库>/bin/ 或 ~/.dsh/bili-reef/bin/',
 })
 
 // ③ Node 版本（要 18+ 才有稳定 fetch）
@@ -107,7 +107,7 @@ try {
 try {
   // 2026-10-23 修（issue #27，@Schumchanvi 报的）：自定义 DSH_HOME 时这里读错目录 ✗
   //   以前写死 path.join(HOME, '.dsh', ...) ✗ → 体检误报「配置里没有任何作息窗口」✗
-  const cfgPath = process.env.BILI_WHALE_CONFIG || dshPath('bili-whale.config.json')
+  const cfgPath = process.env.BILI_REEF_CONFIG || dshPath('bili-reef.config.json')
   const statePath = dshPath('whale-night.json')
   const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'))
   const night = cfg.night ?? {}

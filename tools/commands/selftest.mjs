@@ -16,7 +16,7 @@ import { NODE_EXE } from '../lib/nodebin.mjs'   // 2026-10-21：别用 process.e
 
 const HOME = (process.env.USERPROFILE || process.env.HOME || '/')
 const DSH = dshPath()
-const CFG = path.join(DSH, 'bili-whale.config.json')
+const CFG = path.join(DSH, 'bili-reef.config.json')
 const CRED = path.join(HOME, '.bili-ai', 'credentials.json')
 const OK = '✓'
 const NO = '✗'
@@ -90,7 +90,7 @@ try {
 console.log('\n────────── 接下来要做的两件事（很多人卡在这）──────────\n')
 console.log('  ① 【找到她的会话】')
 console.log('     插件启动时会自动开一个会话，位置在：')
-console.log('       左侧「工作区」→ 展开「未分组」文件夹 → 里面那个 bili-whale')
+console.log('       左侧「工作区」→ 展开「未分组」文件夹 → 里面那个 bili-reef')
 console.log('     ⚠️ 不点开「未分组」是看不见它的 —— 这一步最容易漏 ✗')
 console.log('')
 console.log('  ② 【给她完全权限】')

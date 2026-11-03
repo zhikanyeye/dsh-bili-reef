@@ -7,13 +7,13 @@
  * **完全不读 DSH_HOME**。两边的 home 语义一旦不一致就会分叉：
  *
  *   · DSH_HOME 被自定义（多个 profile 根、便携安装、CI）时，
- *     宿主把配置写进 $DSH_HOME/bili-whale.config.json，
+ *     宿主把配置写进 $DSH_HOME/bili-reef.config.json，
  *     工具链却去 $HOME/.dsh/ 读 → 读不到（或读到另一份），
  *     生物钟、日记、日志、配置全部错位。
  *
  * 因此所有 tools/ 脚本都应从这里取路径，别再本地拼 '.dsh'。
  *
- * 注意保留旧行为：USERPROFILE 优先于 HOME，`BILI_WHALE_CONFIG` 仍可覆盖配置文件位置。
+ * 注意保留旧行为：USERPROFILE 优先于 HOME，`BILI_REEF_CONFIG` 仍可覆盖配置文件位置。
  */
 import os from 'node:os'
 import path from 'node:path'
@@ -30,8 +30,8 @@ export const dshPath = (...parts) => path.join(DSH_HOME, ...parts)
 /** 拼一个位于用户主目录下的路径（.bili-ai 等凭据/状态目录用）。 */
 export const homePath = (...parts) => path.join(HOME, ...parts)
 
-/** 插件配置文件（保留 BILI_WHALE_CONFIG 覆盖）。 */
-export const configPath = process.env.BILI_WHALE_CONFIG || dshPath('bili-whale.config.json')
+/** 插件配置文件（保留 BILI_REEF_CONFIG 覆盖）。 */
+export const configPath = process.env.BILI_REEF_CONFIG || dshPath('bili-reef.config.json')
 
 /** Credentials are per OS user, independent of DSH_HOME. */
 export const credentialsPath = homePath('.bili-ai', 'credentials.json')
